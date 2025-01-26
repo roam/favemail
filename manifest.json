@@ -1,0 +1,20 @@
+{
+  "manifest_version": 2,
+  "name": "Favemail",
+  "version": "1.0",
+
+  "description": "Change favicon for Gmail",
+
+  "icons": {
+    "48": "icons/favemail.png",
+    "96": "icons/favemail@2x.png"
+  },
+
+  "content_scripts": [
+    {
+      "matches": ["https://mail.google.com/mail/*"],
+      "js": ["favemail.js"]
+    }
+  ],
+  "web_accessible_resources": ["icons/m.svg"]
+}
