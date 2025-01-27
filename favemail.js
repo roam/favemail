@@ -1,3 +1,10 @@
+// Favemail browser extension.
+//
+// Changes the favicon for Google Mail to make it easier to
+// differentiate between multiple accounts.
+
+// URL of the embedded favicon template.
+//
 // The icon is, from back to front, composed of:
 // - Frame: a rounded rect covering the viewport (1 opacity)
 // - M frame: a white M shape (.5 opacity)
