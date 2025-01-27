@@ -89,7 +89,7 @@ const swapFavicon = (template) => {
     return;
   }
   // Let's perform our magic!
-  const color = AccentColor.calculate(extractAppName(document.title));
+  const color = AccentColor.calculate(extractOrgName(document.title));
   const unread = parseUnreadCount(href);
   const svg = template(color, unread > 0);
   link.setAttribute('href', 'data:image/svg+xml,' + encodeURIComponent(svg));
@@ -101,7 +101,7 @@ const AccentColor = {
   // Fixed colors based on the app name.
   fixed: {
     Gmail: '#3799EB',
-    'Roam Mail': '#FC3B71',
+    Roam: '#FC3B71',
   },
   // Calculate a (stable) color from the app name.
   calculate: function (appName) {
@@ -124,8 +124,8 @@ const AccentColor = {
   },
 };
 
-// Basically extracts the org name or "Gmail" from the
-// title of the document.
+// Extracts the org name or "Gmail" from the title of the
+// document.
 //
 // The title in Google Mail is composed of three parts:
 // 1. Location (Inbox, Drafts, "Label"...)
@@ -135,9 +135,17 @@ const AccentColor = {
 // Examples:
 // - "Inbox - youraccount@gmail.com - Gmail"
 // - "Inbox (1) - name@yourdomain.com - Your Org Mail"
-const extractAppName = (title) => {
+const extractOrgName = (title) => {
   const parts = title.split(' - ');
-  return parts.length ? parts[parts.length - 1] : null;
+  const name = parts.length ? parts[parts.length - 1] : null;
+  if (!name || name === 'Gmail') {
+    return name;
+  }
+  const suffix = ' Mail';
+  if (name.endsWith(suffix)) {
+    return name.substring(0, name.length - suffix.length);
+  }
+  return name;
 };
 
 // Parse the favicon url to get the number of unread messages.
