@@ -57,18 +57,23 @@ const createIconTemplate = (text) => {
 const observeFaviconChanges = (updater) => {
   const inspector = (mutationList) => {
     for (const mutation of mutationList) {
-      if (mutation.type === 'childList') {
-        // TODO Check if this can be optimized
-        updater();
+      if (mutation.type !== 'childList') {
+        console.error(
+          'Expected only mutations of type childList; got:',
+          mutation.type
+        );
+        break;
+      }
+      for (const node of mutation.addedNodes) {
+        if (node.nodeName === 'LINK' && node.getAttribute('rel') === 'icon') {
+          updater();
+          break;
+        }
       }
     }
   };
   const observer = new MutationObserver(inspector);
-  observer.observe(document.head, {
-    attributes: false,
-    childList: true,
-    subtree: false,
-  });
+  observer.observe(document.head, { childList: true });
 };
 
 // Swap the favicon using the template function.
